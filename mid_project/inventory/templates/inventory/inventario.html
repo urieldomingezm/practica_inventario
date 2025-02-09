@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Inventario</title>
+
+    <!-- Bootstrap CSS desde CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+
+    <!-- SweetAlert2 CSS desde CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- jQuery DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+
+    {% load static %}
+
+    <!-- CUMSTOM CSS -->
+    <link rel="stylesheet" href="{% static 'inventario/style.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center my-4">Inventario</h1>
+
+        <!-- Gráficos -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="text-center">Stock de Productos</h5>
+                    <canvas id="stockChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <h5 class="text-center">Movimientos de Inventario</h5>
+                    <canvas id="movementChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Pestañas para alternar entre las tablas -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="products-tab" data-bs-toggle="tab" data-bs-target="#products"
+                    type="button" role="tab" aria-controls="products" aria-selected="true">Productos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="movements-tab" data-bs-toggle="tab" data-bs-target="#movements"
+                    type="button" role="tab" aria-controls="movements" aria-selected="false">Movimientos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button"
+                    role="tab" aria-controls="users" aria-selected="false">Usuarios</button>
+            </li>
+        </ul>
+
+        <!-- Contenido de las pestañas -->
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="products" role="tabpanel" aria-labelledby="products-tab">
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-8">
+                        <input type="text" id="search" class="form-control" placeholder="Buscar producto">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary w-100" onclick="searchProduct()">Buscar</button>
+                    </div>
+                </div>
+
+                <!-- Tabla de productos -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover table-fixed">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('productTable', 0)">Nombre</th>
+                                <th onclick="sortTable('productTable', 1)">Stock</th>
+                                <th onclick="sortTable('productTable', 2)">Precio</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTable"></tbody>
+                    </table>
+                </div>
+                <!-- Paginación -->
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <nav>
+                            <ul class="pagination justify-content-center" id="productPagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña de Movimientos -->
+            <div class="tab-pane fade" id="movements" role="tabpanel" aria-labelledby="movements-tab">
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-8">
+                        <input type="text" id="searchMovement" class="form-control" placeholder="Buscar movimiento">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary w-100" onclick="searchMovement()">Buscar</button>
+                    </div>
+                </div>
+
+                <!-- Tabla de movimientos -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover table-fixed">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('movementTable', 0)">Producto</th>
+                                <th onclick="sortTable('movementTable', 1)">Tipo</th>
+                                <th onclick="sortTable('movementTable', 2)">Cantidad</th>
+                                <th onclick="sortTable('movementTable', 3)">Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movementTable"></tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <nav>
+                            <ul class="pagination justify-content-center" id="movementPagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña de Usuarios -->
+            <div class="tab-pane fade" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <div class="row mb-3 mt-3">
+                    <div class="col-md-8">
+                        <input type="text" id="searchUser" class="form-control" placeholder="Buscar usuario">
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-primary w-100" onclick="searchUser()">Buscar</button>
+                    </div>
+                </div>
+
+                <!-- Tabla de usuarios -->
+                <div class="table-container">
+                    <table class="table table-bordered table-hover table-fixed">
+                        <thead>
+                            <tr>
+                                <th onclick="sortTable('userTable', 0)">Nombre</th>
+                                <th onclick="sortTable('userTable', 1)">Rol</th>
+                                <th>Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTable"></tbody>
+                    </table>
+                </div>
+                <!-- Paginación -->
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <nav>
+                            <ul class="pagination justify-content-center" id="userPagination"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Editar Producto -->
+    <div class="modal" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editForm">
+                        <div class="mb-3">
+                            <label for="editName" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="editName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="editStock" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPrice" class="form-label">Precio</label>
+                            <input type="text" class="form-control" id="editPrice" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Mostrar Movimientos de Inventario -->
+    <div class="modal" id="movementModal" tabindex="-1" aria-labelledby="movementModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="movementModalLabel">Movimientos de Inventario</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="movementDetailsTable"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- SweetAlert2 JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
+    <!-- Bootstrap JS desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ARCHIVOS DE JS -->
+    {% load static %}
+    <script src="{% static 'inventario/sortTable.js' %}"></script>
+    <script src="{% static 'inventario/charts.js' %}"></script>
+    <script src="{% static 'inventario/tables.js' %}"></script>
+    <script src="{% static 'inventario/search.js' %}"></script>
+    <script src="{% static 'inventario/crud.js' %}"></script>
+</body>
+
+</html>

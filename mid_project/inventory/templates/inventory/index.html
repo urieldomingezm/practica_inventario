@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/just-validate@4.4.1/dist/just-validate.min.css">
+
+    <style>
+        .form-control {
+            padding-left: 35px;
+        }
+
+        .icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-r from-purple-500 to-blue-500 min-h-screen flex flex-col justify-between m-0">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-96 mx-auto mt-20">
+        <h3 class="text-center text-2xl font-semibold text-indigo-600 mb-6">Iniciar Sesión</h3>
+
+        {% if messages %}
+        <div class="alert alert-danger">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form id="loginForm" method="POST">
+            {% csrf_token %}
+            <div class="mb-4 relative">
+                <label for="username" class="block text-gray-700 font-medium">Usuario</label>
+                <i class="fas fa-user icon text-gray-500"></i>
+                <input type="text" class="form-control w-full p-3 mt-2 border rounded-lg text-gray-700" id="username"
+                    name="username" required placeholder="Ingresa tu usuario">
+            </div>
+            <div class="mb-4 relative">
+                <label for="password" class="block text-gray-700 font-medium">Contraseña</label>
+                <i class="fas fa-lock icon text-gray-500"></i>
+                <input type="password" class="form-control w-full p-3 mt-2 border rounded-lg text-gray-700"
+                    id="password" name="password" required placeholder="Ingresa tu contraseña">
+            </div>
+            <button type="submit"
+                class="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition-colors">Ingresar</button>
+        </form>
+        <div class="mt-4 text-center">
+            <p class="text-gray-700">Bienvenida <a href="{% url 'welcome' %}"
+                    class="text-indigo-600 hover:text-indigo-800">Home</a></p>
+        </div>
+
+    </div>
+
+    <footer class="bg-gray-800 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
+            <div class="mt-2">
+                <a href="#" class="text-indigo-400 hover:text-indigo-600 mx-2">Política de Privacidad</a>
+                <a href="#" class="text-indigo-400 hover:text-indigo-600 mx-2">Términos de Servicio</a>
+                <a href="#" class="text-indigo-400 hover:text-indigo-600 mx-2">Ayuda</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>
