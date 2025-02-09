@@ -155,7 +155,7 @@ docker run -p 8000:8000 mib_project
 
 📝 Notas Finales
 
-Este proyecto es parte de una prueba técnica y aún tiene errores que deben corregirse. Se aceptan contribuciones para mejorar el login y la edición de productos.
+Este proyecto es parte de una prueba técnica y aún tiene errores que deben corregirse.
 
 📌 Autor: ANGEL URIEL DOMINGUEZ MEDINA📌 
 Repositorio: GitHub Repo
