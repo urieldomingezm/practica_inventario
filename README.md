@@ -53,7 +53,32 @@ cd MIB_PROJECT
 
 👉 Instalar Dependencias
 
-pip install -r requirements.txt
+pip install mysqlclient djangorestframework djangorestframework-simplejwt
+
+### Dependencias del Proyecto
+
+El proyecto utiliza las siguientes dependencias:
+
+- **asgiref**: 3.8.1
+- **certifi**: 2024.2.2
+- **distlib**: 0.3.8
+- **Django**: 5.0.6
+- **django-cors-headers**: 4.6.0
+- **django-filter**: 24.3
+- **djangorestframework**: 3.15.2
+- **djangorestframework_simplejwt**: 5.4.0
+- **filelock**: 3.14.0
+- **mysqlclient**: 2.2.7
+- **pillow**: 10.3.0
+- **pip**: 24.0
+- **pipenv**: 2023.12.1
+- **platformdirs**: 4.2.1
+- **PyJWT**: 2.10.1
+- **PyMySQL**: 1.1.0
+- **setuptools**: 69.5.1
+- **sqlparse**: 0.5.0
+- **tzdata**: 2024.1
+- **virtualenv**: 20.26.2
 
 🛠️ Configurar la Base de Datos
 
